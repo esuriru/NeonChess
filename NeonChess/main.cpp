@@ -38,8 +38,7 @@ int main() {
     }
     glViewport(0, 0, 800, 600);
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    Shader mainShader("chess.vs", "chess.fs");
-    
+    Shader mainShader("chess.vs", "chess.fs");   
     mainShader.use();
     while (!glfwWindowShouldClose(window)) {
 
