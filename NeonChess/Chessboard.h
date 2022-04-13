@@ -11,4 +11,5 @@ public:
 	ChessBoard(); //initialize the chessboard
 	void setPiece(const glm::ivec2& location, ChessPiece* refPiece);
 	ChessPiece*& getPiece(const glm::ivec2& location);
+
 };

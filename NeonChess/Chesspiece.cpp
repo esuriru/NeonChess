@@ -3,12 +3,14 @@
 ChessPiece::ChessPiece()
 	: pieceColour(Colour::NIL), pieceType(PieceType::EMPTY)
 {
-
+	
 }
 
-ChessPiece::ChessPiece(const Colour& _pc, const PieceType& _pt, const glm::ivec2& location) {
+
+ChessPiece::ChessPiece(const Colour& _pc, const PieceType& _pt) {
 	pieceColour = _pc;
 	pieceType = _pt;
+	
 }
 
 void ChessPiece::setPieceColour(const Colour& colour) {	
@@ -24,3 +26,4 @@ void ChessPiece::setPieceType(const PieceType type) {
 const PieceType& ChessPiece::getPieceType() const {
 	return pieceType;
 }
+

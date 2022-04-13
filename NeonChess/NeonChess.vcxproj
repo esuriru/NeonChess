@@ -145,12 +145,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Downloads\glad\src\glad.c" />
     <ClCompile Include="Chessboard.cpp" />
+    <ClCompile Include="Chessgame.cpp" />
     <ClCompile Include="Chesspiece.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="chess.vs" />
     <ClInclude Include="Chessboard.h" />
+    <ClInclude Include="Chessgame.h" />
     <ClInclude Include="Chesspiece.h" />
     <ClInclude Include="chessshader.h" />
   </ItemGroup>

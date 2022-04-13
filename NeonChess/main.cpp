@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "chessshader.h"
+#include "Chessgame.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -40,6 +41,8 @@ int main() {
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     Shader mainShader("chess.vs", "chess.fs");   
     mainShader.use();
+    ChessGame game;
+    
     while (!glfwWindowShouldClose(window)) {
 
         processInput(window);
