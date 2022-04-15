@@ -1,17 +1,16 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
-layout (lcoation = 1) in vec3 pieceColour;
+layout (location = 1) in vec2 TexCoord;
 
 out vec3 ourColor;
+out vec2 _tc;
 
-uniform mat4 MVP;
 
 
 void main()
 {
 
 	gl_Position = vec4(aPos, 1.0);
-	
-	ourColor = pieceColour;
-
+	ourColor = vec3(1.0f, 0.5f, 0.2f);
+	_tc = TexCoord;
 }

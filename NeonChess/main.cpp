@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "chessshader.h"
 #include "Chessgame.h"
+#include "stb_image.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -39,19 +40,66 @@ int main() {
     }
     glViewport(0, 0, 800, 600);
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    Shader mainShader("chess.vs", "chess.fs");   
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    Shader mainShader("chessvs", "chessfs");   
     mainShader.use();
     ChessGame game;
-    unsigned int VBO, VAO;
+
+    float tileVertices[] = {
+            // positions      // texture coords
+         0.5f,  0.5f, 0.0f,    1.0f, 1.0f,   // top right
+         0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f,    0.0f, 1.0f    // top left 
+    };
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+    //texture tile
+    unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
     
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(game.getBoard().getPiece(glm::ivec2(3, 0))->getPieceVertices()), &game.getBoard().getPiece(glm::ivec2(3, 0))->getPieceVertices().front(), GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(tileVertices), tileVertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    unsigned int chessPieceTexture;
+    glGenTextures(1, &chessPieceTexture);
+    glBindTexture(GL_TEXTURE_2D, chessPieceTexture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* data = stbi_load("chesspiecesadjusted.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else {
+        std::cout << "Failed to load texture\n";
+    }
+    stbi_image_free(data);
+    mainShader.use();
+    mainShader.setInt("pieceTexture", 0);
+    
+    
     
     while (!glfwWindowShouldClose(window)) {
 
@@ -65,7 +113,7 @@ int main() {
         mainShader.setMat4("MVP", MVP);
 
         glBindVertexArray(VAO);     
-        glDrawArrays(GL_TRIANGLES, 0, game.getBoard().getPiece(glm::ivec2(3, 0))->getPieceVertices().size());
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -81,3 +129,5 @@ void processInput(GLFWwindow* window) {
     if (glfwGetKey(window, (GLFW_KEY_ESCAPE)) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
+
+void renderChessboard() {};

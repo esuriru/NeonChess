@@ -150,14 +150,14 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chess.vs" />
+    <ClInclude Include="chessvs" />
     <ClInclude Include="Chessboard.h" />
     <ClInclude Include="Chessgame.h" />
     <ClInclude Include="Chesspiece.h" />
     <ClInclude Include="chessshader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="chess.fs" />
+    <None Include="chessfs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

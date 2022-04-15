@@ -27,7 +27,6 @@ ChessBoard::ChessBoard() {
 	for (int i = 0; i < 8; ++i) {
 		setPiece(glm::ivec2(i, 6), new ChessPiece(Colour::BLACK, PieceType::PAWN));
 	}
-
 }
 
 void ChessBoard::setPiece(const glm::ivec2& location, ChessPiece* refPiece) {
@@ -38,8 +37,6 @@ ChessPiece*& ChessBoard::getPiece(const glm::ivec2& location)
 {
 	return chessboard[location.x + (location.y * 8)];
 }
-
-
 
 const std::vector<glm::ivec2>& ChessBoard::getPossibleMoves(ChessPiece* refPiece) 
 {
