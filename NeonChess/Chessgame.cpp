@@ -3,3 +3,8 @@
 ChessGame::ChessGame() {
 	
 }
+
+ChessBoard ChessGame::getBoard() const
+{
+	return gameboard;
+}

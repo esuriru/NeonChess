@@ -10,7 +10,12 @@ ChessPiece::ChessPiece()
 ChessPiece::ChessPiece(const Colour& _pc, const PieceType& _pt) {
 	pieceColour = _pc;
 	pieceType = _pt;
-	
+	piece2DVertices = {
+		0.5f, -0.5f, 0.0f,
+		0.0f, -0.5f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		0.5f, 0.0f, 0.0f
+	};
 }
 
 void ChessPiece::setPieceColour(const Colour& colour) {	
@@ -26,4 +31,11 @@ void ChessPiece::setPieceType(const PieceType type) {
 const PieceType& ChessPiece::getPieceType() const {
 	return pieceType;
 }
+
+const std::vector<float> ChessPiece::getPieceVertices() const
+{
+	return piece2DVertices;
+}
+
+
 

@@ -23,7 +23,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "NeonChess", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -42,6 +42,16 @@ int main() {
     Shader mainShader("chess.vs", "chess.fs");   
     mainShader.use();
     ChessGame game;
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(game.getBoard().getPiece(glm::ivec2(3, 0))->getPieceVertices()), &game.getBoard().getPiece(glm::ivec2(3, 0))->getPieceVertices().front(), GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
     
     while (!glfwWindowShouldClose(window)) {
 
@@ -49,6 +59,13 @@ int main() {
         glClearColor(100.0f / 255.0f, 166.0f / 255.0f, 234.0f / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         mainShader.use();
+        glm::mat4 MVP = glm::mat4(1.0f);
+        MVP = glm::translate(MVP, glm::vec3(1.0f, 1.0f, 0.0f));
+        MVP = glm::rotate(MVP, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        mainShader.setMat4("MVP", MVP);
+
+        glBindVertexArray(VAO);     
+        glDrawArrays(GL_TRIANGLES, 0, game.getBoard().getPiece(glm::ivec2(3, 0))->getPieceVertices().size());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
