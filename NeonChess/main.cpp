@@ -162,7 +162,7 @@ int main() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    unsigned int chessPieceTexture;
+    unsigned int chessPieceTexture, tileTexture;
     glGenTextures(1, &chessPieceTexture);
     glBindTexture(GL_TEXTURE_2D, chessPieceTexture);
 
@@ -182,9 +182,32 @@ int main() {
     else {
         std::cout << "Failed to load texture\n";
     }
+
+    
     stbi_image_free(data);
+
+    glGenTextures(1, &tileTexture);
+    glBindTexture(GL_TEXTURE_2D, tileTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    data = stbi_load("tile.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
     mainShader.use();
     mainShader.setInt("pieceTexture", 0);
+    mainShader.setInt("tileTexture", 1);
     
     
     
@@ -194,6 +217,11 @@ int main() {
         glClearColor(100.0f / 255.0f, 166.0f / 255.0f, 234.0f / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         mainShader.use();
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, chessPieceTexture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, tileTexture);
         glm::mat4 projection = glm::ortho(0.0f, ((float)SCR_WIDTH/(float)SCR_HEIGHT)*8.0f, 0.0f, 8.0f, -100.0f, 100.0f); //glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mainShader.setMat4("projection", projection);
 
@@ -205,13 +233,29 @@ int main() {
         for (int i = 0; i < 64; ++i) {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, tilePositions[i]);
-            if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8)) == nullptr) continue;
-            mainShader.setInt("pieceId", (int) game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8))->getPieceID());
-            if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8))->getPieceColour() == Colour::BLACK)
-                mainShader.setVec3("pieceColour", _BLACKCOLOUR);
+            if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8)) != nullptr) {
+                mainShader.setBool("renderPiece", true);
+                mainShader.setInt("pieceId", (int)game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8))->getPieceID());
+                if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8))->getPieceColour() == Colour::BLACK)
+                    mainShader.setVec3("pieceColour", _BLACKCOLOUR);
+                else
+                    mainShader.setVec3("pieceColour", _WHITECOLOUR);
+            }
             else
-                mainShader.setVec3("pieceColour", _WHITECOLOUR);
-            
+                mainShader.setBool("renderPiece", false);
+            if ((i / 8) % 2 == 0){
+                if (i % 2 == 1) 
+                    mainShader.setVec3("tileColour", glm::vec3(1.0f, 1.0f, 1.0f));              
+                else 
+                    mainShader.setVec3("tileColour", glm::vec3(0.8f, 0.8f, 0.8f));
+            }
+            else {
+                if (i % 2 == 1) 
+                    mainShader.setVec3("tileColour", glm::vec3(0.8f, 0.8f, 0.8f));             
+                else 
+                    mainShader.setVec3("tileColour", glm::vec3(1.0f, 1.0f, 1.0f));        
+            }
+
             mainShader.setMat4("model", model);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             
