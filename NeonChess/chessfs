@@ -1,13 +1,13 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec3 ourColor;
 in vec2 _tc;
 
 uniform sampler2D pieceTexture;
 uniform int pieceId;
+uniform vec3 pieceColour;
 
 void main()
 {
-	FragColor = texture(pieceTexture, _tc*vec2(0.166666,1)+pieceId*vec2(0,0.166666)) * vec4(ourColor, 1.0f);
+	FragColor = texture(pieceTexture, _tc*vec2(0.166666,1)+pieceId*vec2(0.166666, 1)) * vec4(pieceColour, 1.0);
 }

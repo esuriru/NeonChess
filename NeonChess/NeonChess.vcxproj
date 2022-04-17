@@ -144,18 +144,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Downloads\glad\src\glad.c" />
+    <ClCompile Include="bishop.cpp" />
     <ClCompile Include="Chessboard.cpp" />
     <ClCompile Include="Chessgame.cpp" />
     <ClCompile Include="Chesspiece.cpp" />
+    <ClCompile Include="king.cpp" />
+    <ClCompile Include="knight.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pawn.cpp" />
+    <ClCompile Include="queen.cpp" />
+    <ClCompile Include="rook.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bishop.h" />
     <ClInclude Include="chessvs" />
     <ClInclude Include="Chessboard.h" />
     <ClInclude Include="Chessgame.h" />
     <ClInclude Include="Chesspiece.h" />
     <ClInclude Include="chessshader.h" />
+    <ClInclude Include="king.h" />
+    <ClInclude Include="knight.h" />
+    <ClInclude Include="pawn.h" />
+    <ClInclude Include="queen.h" />
+    <ClInclude Include="rook.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>

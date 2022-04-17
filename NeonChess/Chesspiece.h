@@ -1,23 +1,25 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <vector>
+#include "Chessboard.h"
 
-enum class Colour { BLACK, WHITE, NIL };
-enum class PieceType { PAWN, BISHOP, KNIGHT, ROOK, QUEEN, KING, EMPTY };
+
+class ChessBoard;
+enum class Colour { BLACK, WHITE };
+
 
 
 class ChessPiece {
-private:	
+protected:	
+	unsigned int pieceID;
 	Colour pieceColour;
-	PieceType pieceType;
-	std::vector<float> piece2DVertices;
+	ChessBoard& boardRef;
+
 public:
-	ChessPiece();
-	ChessPiece(const Colour& _pc, const PieceType& _pt);
+	ChessPiece(ChessBoard& ref);
 	void setPieceColour(const Colour& colour);
 	const Colour& getPieceColour() const;
-	void setPieceType(const PieceType type);
-	const PieceType& getPieceType() const;
-	const std::vector<float> getPieceVertices() const;
+	virtual const std::vector<glm::ivec2>& getPossibleLocations() = 0;
+	const unsigned int& getPieceID() const;
 	
 };

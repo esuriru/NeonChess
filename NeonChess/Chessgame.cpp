@@ -1,10 +1,12 @@
 #include "Chessgame.h"
 
-ChessGame::ChessGame() {
-	
+ChessGame::ChessGame()
+{
+
 }
 
-ChessBoard ChessGame::getBoard() const
+
+ChessBoard ChessGame::getBoard()
 {
 	return gameboard;
 }

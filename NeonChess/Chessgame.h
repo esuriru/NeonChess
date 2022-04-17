@@ -6,6 +6,7 @@ private:
 	ChessBoard gameboard;
 public:
 	ChessGame();
-	ChessBoard getBoard() const;
+
+	ChessBoard getBoard();
 
 };

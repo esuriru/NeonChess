@@ -14,6 +14,8 @@ void processInput(GLFWwindow* window);
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+const glm::vec3 _WHITECOLOUR = glm::vec3(4.0f / 255.0f, 217.0f / 255.0f, 255.0f / 255.0f);
+const glm::vec3 _BLACKCOLOUR = glm::vec3(255.0f / 255.0f, 16.0f / 255.0f, 240.0f / 255.0f);
 
 int main() {
 
@@ -46,16 +48,101 @@ int main() {
     mainShader.use();
     ChessGame game;
 
+    /*float tileVertices[] = {
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 
+             0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,      
+    };*/
+
     float tileVertices[] = {
-            // positions      // texture coords
-         0.5f,  0.5f, 0.0f,    1.0f, 1.0f,   // top right
-         0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f,    0.0f, 1.0f    // top left 
+        // positions      // texture coords
+     0.5f,  0.5f, 0.0f,    1.0f, 1.0f,   // top right
+     0.5f, -0.5f, 0.0f,    1.0f, 0.0f,   // bottom right
+    -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,   // bottom left
+    -0.5f,  0.5f, 0.0f,    0.0f, 1.0f    // top left 
     };
     unsigned int indices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
+    };
+
+    // world space positions of tiles
+    glm::vec3 tilePositions[] = {
+        glm::ivec3(8.0f, 0.0f, 2.0f),
+        glm::ivec3(7.0f, 0.0f, 2.0f),
+        glm::ivec3(6.0f, 0.0f, 2.0f),
+        glm::ivec3(5.0f, 0.0f, 2.0f),
+        glm::ivec3(4.0f, 0.0f, 2.0f),
+        glm::ivec3(3.0f, 0.0f, 2.0f),
+        glm::ivec3(2.0f, 0.0f, 2.0f),
+        glm::ivec3(1.0f, 0.0f, 2.0f),
+        glm::ivec3(8.0f, 1.0f, 2.0f),
+        glm::ivec3(7.0f, 1.0f, 2.0f),
+        glm::ivec3(6.0f, 1.0f, 2.0f),
+        glm::ivec3(5.0f, 1.0f, 2.0f),
+        glm::ivec3(4.0f, 1.0f, 2.0f),
+        glm::ivec3(3.0f, 1.0f, 2.0f),
+        glm::ivec3(2.0f, 1.0f, 2.0f),
+        glm::ivec3(1.0f, 1.0f, 2.0f),
+        glm::ivec3(8.0f, 2.0f, 2.0f),
+        glm::ivec3(7.0f, 2.0f, 2.0f),
+        glm::ivec3(6.0f, 2.0f, 2.0f),
+        glm::ivec3(5.0f, 2.0f, 2.0f),
+        glm::ivec3(4.0f, 2.0f, 2.0f),
+        glm::ivec3(3.0f, 2.0f, 2.0f),
+        glm::ivec3(2.0f, 2.0f, 2.0f),
+        glm::ivec3(1.0f, 2.0f, 2.0f),
+        glm::ivec3(8.0f, 3.0f, 2.0f),
+        glm::ivec3(7.0f, 3.0f, 2.0f),
+        glm::ivec3(6.0f, 3.0f, 2.0f),
+        glm::ivec3(5.0f, 3.0f, 2.0f),
+        glm::ivec3(4.0f, 3.0f, 2.0f),
+        glm::ivec3(3.0f, 3.0f, 2.0f),
+        glm::ivec3(2.0f, 3.0f, 2.0f),
+        glm::ivec3(1.0f, 3.0f, 2.0f),
+        glm::ivec3(8.0f, 4.0f, 2.0f),
+        glm::ivec3(7.0f, 4.0f, 2.0f),
+        glm::ivec3(6.0f, 4.0f, 2.0f),
+        glm::ivec3(5.0f, 4.0f, 2.0f),
+        glm::ivec3(4.0f, 4.0f, 2.0f),
+        glm::ivec3(3.0f, 4.0f, 2.0f),
+        glm::ivec3(2.0f, 4.0f, 2.0f),
+        glm::ivec3(1.0f, 4.0f, 2.0f),
+        glm::ivec3(8.0f, 5.0f, 2.0f),
+        glm::ivec3(7.0f, 5.0f, 2.0f),
+        glm::ivec3(6.0f, 5.0f, 2.0f),
+        glm::ivec3(5.0f, 5.0f, 2.0f),
+        glm::ivec3(4.0f, 5.0f, 2.0f),
+        glm::ivec3(3.0f, 5.0f, 2.0f),
+        glm::ivec3(2.0f, 5.0f, 2.0f),
+        glm::ivec3(1.0f, 5.0f, 2.0f),
+        glm::ivec3(8.0f, 6.0f, 2.0f),
+        glm::ivec3(7.0f, 6.0f, 2.0f),
+        glm::ivec3(6.0f, 6.0f, 2.0f),
+        glm::ivec3(5.0f, 6.0f, 2.0f),
+        glm::ivec3(4.0f, 6.0f, 2.0f),
+        glm::ivec3(3.0f, 6.0f, 2.0f),
+        glm::ivec3(2.0f, 6.0f, 2.0f),
+        glm::ivec3(1.0f, 6.0f, 2.0f),
+        glm::ivec3(8.0f, 7.0f, 2.0f),
+        glm::ivec3(7.0f, 7.0f, 2.0f),
+        glm::ivec3(6.0f, 7.0f, 2.0f),
+        glm::ivec3(5.0f, 7.0f, 2.0f),
+        glm::ivec3(4.0f, 7.0f, 2.0f),
+        glm::ivec3(3.0f, 7.0f, 2.0f),
+        glm::ivec3(2.0f, 7.0f, 2.0f),
+        glm::ivec3(1.0f, 7.0f, 2.0f),
+        glm::ivec3(8.0f, 8.0f, 2.0f),
+        glm::ivec3(7.0f, 8.0f, 2.0f),
+        glm::ivec3(6.0f, 8.0f, 2.0f),
+        glm::ivec3(5.0f, 8.0f, 2.0f),
+        glm::ivec3(4.0f, 8.0f, 2.0f),
+        glm::ivec3(3.0f, 8.0f, 2.0f),
+        glm::ivec3(2.0f, 8.0f, 2.0f),
+        glm::ivec3(1.0f, 8.0f, 2.0f),
     };
     //texture tile
     unsigned int VBO, VAO, EBO;
@@ -107,13 +194,28 @@ int main() {
         glClearColor(100.0f / 255.0f, 166.0f / 255.0f, 234.0f / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         mainShader.use();
-        glm::mat4 MVP = glm::mat4(1.0f);
-        MVP = glm::translate(MVP, glm::vec3(1.0f, 1.0f, 0.0f));
-        MVP = glm::rotate(MVP, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        mainShader.setMat4("MVP", MVP);
+        glm::mat4 projection = glm::ortho(0.0f, ((float)SCR_WIDTH/(float)SCR_HEIGHT)*8.0f, 0.0f, 8.0f, -100.0f, 100.0f); //glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        mainShader.setMat4("projection", projection);
 
-        glBindVertexArray(VAO);     
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(-0.5f, 0.5f, 0.0f));
+        mainShader.setMat4("view", view);
+
+        glBindVertexArray(VAO);
+        for (int i = 0; i < 64; ++i) {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, tilePositions[i]);
+            if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8)) == nullptr) continue;
+            mainShader.setInt("pieceId", (int) game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8))->getPieceID());
+            if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8))->getPieceColour() == Colour::BLACK)
+                mainShader.setVec3("pieceColour", _BLACKCOLOUR);
+            else
+                mainShader.setVec3("pieceColour", _WHITECOLOUR);
+            
+            mainShader.setMat4("model", model);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -129,5 +231,3 @@ void processInput(GLFWwindow* window) {
     if (glfwGetKey(window, (GLFW_KEY_ESCAPE)) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
-
-void renderChessboard() {};
