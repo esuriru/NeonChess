@@ -214,7 +214,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
 
         processInput(window);
-        glClearColor(100.0f / 255.0f, 166.0f / 255.0f, 234.0f / 255.0f, 1.0f);
+        glClearColor(54.0f / 255.0f, 57.0f / 255.0f, 63.0f / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         mainShader.use();
 
