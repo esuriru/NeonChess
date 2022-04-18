@@ -80,7 +80,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)\include\glad\include;$(SolutionDir)\include\glfw-3.3.7\include;$(SolutionDir)\include\glm;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\include\glfw-3.3.7\build\src\Debug;C:\Users\logic\Downloads\glfw-3.3.7\build\src\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\include\glfw-3.3.7\build\src\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
