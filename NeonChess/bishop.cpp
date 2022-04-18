@@ -4,7 +4,7 @@ Bishop::Bishop(Colour _c, ChessBoard& ref)
 	: ChessPiece(ref)
 {
 	pieceColour = _c;
-	pieceID = 3;
+	pieceID = 2;
 }
 
 const std::vector<glm::ivec2>& Bishop::getPossibleLocations() {

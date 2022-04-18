@@ -47,7 +47,7 @@ int main() {
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glfwSetCursorPosCallback(window, mouse_callback);
+
     Shader mainShader("chessvs", "chessfs");   
     mainShader.use();
     ChessGame game;
