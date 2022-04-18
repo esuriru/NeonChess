@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\User\Downloads\glfw-3.3.6\glfw-3.3.6\include;C:\Users\User\source\repos\NeonChess;C:\Users\User\Downloads\glad\include;C:\Users\User\Downloads\glm-0.9.6.3\glm;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\glfw-3.3.6\lib;C:\Users\User\Downloads\glfw-3.3.6\glfw-3.3.6\include;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\logic\Downloads\glfw-3.3.7\include;C:\Users\logic\Downloads\glm;C:\Users\logic\Downloads\glad\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\glfw-3.3.6\lib;C:\Users\logic\Downloads\glfw-3.3.7\build\src\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -143,7 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Downloads\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\Downloads\glad\src\glad.c" />
     <ClCompile Include="bishop.cpp" />
     <ClCompile Include="Chessboard.cpp" />
     <ClCompile Include="Chessgame.cpp" />

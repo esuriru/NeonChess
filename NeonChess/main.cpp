@@ -8,9 +8,12 @@
 #include "Chessgame.h"
 #include "stb_image.h"
 
+double mousex, mousey;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -44,6 +47,7 @@ int main() {
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glfwSetCursorPosCallback(window, mouse_callback);
     Shader mainShader("chessvs", "chessfs");   
     mainShader.use();
     ChessGame game;
@@ -216,8 +220,16 @@ int main() {
         processInput(window);
         glClearColor(54.0f / 255.0f, 57.0f / 255.0f, 63.0f / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        
+        
         mainShader.use();
-
+        glfwGetCursorPos(window, &mousex, &mousey);
+        if (mousex < 600) {
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+                std::cout << "grid selected:" << (int)mousex / 75 << "," << (int)mousey / 75 << "\n";
+            }
+        }
+        
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, chessPieceTexture);
         glActiveTexture(GL_TEXTURE1);
@@ -231,8 +243,20 @@ int main() {
 
         glBindVertexArray(VAO);
         for (int i = 0; i < 64; ++i) {
+            glm::ivec2 selectedPiece;
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, tilePositions[i]);
+            glfwGetCursorPos(window, &mousex, &mousey);
+            if (mousex < 600) {
+                if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+                    std::cout << "grid selected:" << (int)mousex / 75 << "," << (int)mousey / 75 << "\n";
+                    if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75)) && game.getBoard().getPiece(glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75))) != nullptr)
+                        selectedPiece = glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75));                      
+                }
+            }
+            if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == selectedPiece) {
+                model = glm::scale(model, glm::vec3(0.95, 0.95, 0.95)); 
+            }
             if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8)) != nullptr) {
                 mainShader.setBool("renderPiece", true);
                 mainShader.setInt("pieceId", (int)game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8))->getPieceID());
@@ -275,3 +299,18 @@ void processInput(GLFWwindow* window) {
     if (glfwGetKey(window, (GLFW_KEY_ESCAPE)) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
+
+//void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+//{
+//    /*std::cout << xpos << "," << ypos << "\n";*/
+//    //one tile is 75x75
+//    if (xpos < 600) {
+//        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+//            std::cout << "grid selected:" << (int)xpos / 75 << "," << (int)ypos / 75 << "\n";
+//        }
+//    }
+//    else {
+//        std::cout << "out of grid\n";
+//    }
+//    
+//}
