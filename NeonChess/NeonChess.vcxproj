@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\include\glad\include;$(SolutionDir)\include\glfw-3.3.7\include;$(SolutionDir)\include\glm;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\include\glfw-3.3.7\build\src\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\includes\glad\include;$(SolutionDir)\includes\glfw-3.3.7\include;$(SolutionDir)\includes\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\includes\glfw-3.3.7\build\src\glfwlib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -143,7 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\include\glad\src\glad.c" />
+    <ClCompile Include="..\includes\glad\src\glad.c" />
     <ClCompile Include="bishop.cpp" />
     <ClCompile Include="Chessboard.cpp" />
     <ClCompile Include="Chessgame.cpp" />
