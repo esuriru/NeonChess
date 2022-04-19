@@ -166,7 +166,7 @@ int main() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    unsigned int chessPieceTexture, tileTexture;
+    unsigned int chessPieceTexture, tileTexture, selectedTileTexture;
     glGenTextures(1, &chessPieceTexture);
     glBindTexture(GL_TEXTURE_2D, chessPieceTexture);
 
@@ -209,27 +209,39 @@ int main() {
     }
     stbi_image_free(data);
 
+    glGenTextures(1, &selectedTileTexture);
+    glBindTexture(GL_TEXTURE_2D, selectedTileTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    data = stbi_load("selectedTile.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
     mainShader.use();
     mainShader.setInt("pieceTexture", 0);
     mainShader.setInt("tileTexture", 1);
-    
+    mainShader.setInt("selectedTileTexture", 2);
+    glm::ivec2 selectedPiece;
     
     
     while (!glfwWindowShouldClose(window)) {
-
         processInput(window);
         glClearColor(54.0f / 255.0f, 57.0f / 255.0f, 63.0f / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         
         mainShader.use();
-        glfwGetCursorPos(window, &mousex, &mousey);
-        if (mousex < 600) {
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
-                std::cout << "grid selected:" << (int)mousex / 75 << "," << (int)mousey / 75 << "\n";
-            }
-        }
-        
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, chessPieceTexture);
         glActiveTexture(GL_TEXTURE1);
@@ -243,19 +255,28 @@ int main() {
 
         glBindVertexArray(VAO);
         for (int i = 0; i < 64; ++i) {
-            glm::ivec2 selectedPiece;
+            
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, tilePositions[i]);
             glfwGetCursorPos(window, &mousex, &mousey);
             if (mousex < 600) {
                 if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
-                    std::cout << "grid selected:" << (int)mousex / 75 << "," << (int)mousey / 75 << "\n";
+                    //std::cout << "grid selected:" << (int)mousex / 75 << "," << (int)mousey / 75 << "\n";
                     if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75)) && game.getBoard().getPiece(glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75))) != nullptr)
                         selectedPiece = glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75));                      
                 }
             }
             if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == selectedPiece) {
                 model = glm::scale(model, glm::vec3(0.95, 0.95, 0.95)); 
+            }
+            if (!(selectedPiece.x == -858993460)) {
+                for (auto _l : game.getBoard().getPiece(selectedPiece)->getPossibleLocations()) {
+                    std::cout << _l.x << _l.y << "\n";
+                    if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == _l)
+                        mainShader.setBool("selectedTileTexture", true);
+                    else
+                        mainShader.setBool("selectedTileTexture", false);
+                }
             }
             if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8)) != nullptr) {
                 mainShader.setBool("renderPiece", true);

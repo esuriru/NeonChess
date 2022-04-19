@@ -5,17 +5,22 @@ in vec2 _tc;
 
 uniform sampler2D pieceTexture;
 uniform sampler2D tileTexture;
+uniform sampler2D selectedTileTexture;
 uniform int pieceId;
 uniform vec3 pieceColour;
 uniform bool renderPiece;
 uniform vec3 tileColour;
+uniform bool renderPossibleMoves;
 
 void main()
 {
 	vec4 _tT = texture(tileTexture, _tc) * vec4(tileColour, 1.0);
 	vec4 _pT = texture(pieceTexture, _tc*vec2(0.166666,1)+pieceId*vec2(0.166666, 1)) * vec4(pieceColour, 1.0);
+	vec4 _stT = texture(selectedTileTexture, _tc);
 	
-	FragColor = renderPiece ? _tT + _pT : _tT;
+	FragColor = renderPiece ? renderPossibleMoves ? _tT + _pT + _stT : _tT + _pT : _tT;
+
+	
 
 	//FragColor = mix(texture(pieceTexture, _tc*vec2(0.166666,1)+pieceId*vec2(0.166666, 1)) * vec4(pieceColour, 1.0), texture(tileTexture, _tc), 0.5);
 }
