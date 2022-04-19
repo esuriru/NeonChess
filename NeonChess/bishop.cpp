@@ -7,7 +7,7 @@ Bishop::Bishop(Colour _c, ChessBoard& ref)
 	pieceID = 2;
 }
 
-const std::vector<glm::ivec2>& Bishop::getPossibleLocations() {
+const std::vector<glm::ivec2> Bishop::getPossibleLocations() {
 	glm::ivec2 currentLocation = boardRef.getPieceLocation(this);
 	std::vector<glm::ivec2> possibleMoves;
 	

@@ -7,7 +7,7 @@ Queen::Queen(Colour _c, ChessBoard& ref)
 	pieceID = 1;
 }
 
-const std::vector<glm::ivec2>& Queen::getPossibleLocations() {
+const std::vector<glm::ivec2> Queen::getPossibleLocations() {
 	glm::ivec2 currentLocation = boardRef.getPieceLocation(this);
 	std::vector<glm::ivec2> possibleMoves;
 	//Bishop

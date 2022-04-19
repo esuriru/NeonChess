@@ -7,7 +7,7 @@ King::King(Colour _c, ChessBoard& ref)
 	pieceID = 0;
 }
 
-const std::vector<glm::ivec2>& King::getPossibleLocations() {
+const std::vector<glm::ivec2> King::getPossibleLocations() {
 	glm::ivec2 currentLocation = boardRef.getPieceLocation(this);
 	std::vector<glm::ivec2> possibleMoves;
 	possibleMoves.push_back(currentLocation + glm::ivec2(0, 1));

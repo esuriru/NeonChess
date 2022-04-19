@@ -7,7 +7,7 @@ Rook::Rook(Colour _c, ChessBoard& ref)
 	pieceID = 4;
 }
 
-const std::vector<glm::ivec2>& Rook::getPossibleLocations() {
+const std::vector<glm::ivec2> Rook::getPossibleLocations() {
 	glm::ivec2 currentLocation = boardRef.getPieceLocation(this);
 	std::vector<glm::ivec2> possibleMoves;
 	for (int i = 0; i < 8; i++) {

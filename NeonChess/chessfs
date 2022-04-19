@@ -18,7 +18,11 @@ void main()
 	vec4 _pT = texture(pieceTexture, _tc*vec2(0.166666,1)+pieceId*vec2(0.166666, 1)) * vec4(pieceColour, 1.0);
 	vec4 _stT = texture(selectedTileTexture, _tc);
 	
-	FragColor = renderPiece ? renderPossibleMoves ? _tT + _pT + _stT : _tT + _pT : _tT;
+	FragColor = renderPiece ? _tT + _pT  : _tT;
+
+	if (renderPossibleMoves){
+		FragColor += _stT;
+	}
 
 	
 

@@ -218,7 +218,7 @@ int main() {
     data = stbi_load("selectedTile.png", &width, &height, &nrChannels, 0);
     if (data)
     {
-        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+        
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
@@ -232,7 +232,7 @@ int main() {
     mainShader.setInt("pieceTexture", 0);
     mainShader.setInt("tileTexture", 1);
     mainShader.setInt("selectedTileTexture", 2);
-    glm::ivec2 selectedPiece;
+    glm::ivec2 selectedPiece = glm::ivec2(-1, -1);
     
     
     while (!glfwWindowShouldClose(window)) {
@@ -246,6 +246,8 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, chessPieceTexture);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, tileTexture);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, selectedTileTexture);
         glm::mat4 projection = glm::ortho(0.0f, ((float)SCR_WIDTH/(float)SCR_HEIGHT)*8.0f, 0.0f, 8.0f, -100.0f, 100.0f); //glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mainShader.setMat4("projection", projection);
 
@@ -269,13 +271,14 @@ int main() {
             if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == selectedPiece) {
                 model = glm::scale(model, glm::vec3(0.95, 0.95, 0.95)); 
             }
-            if (!(selectedPiece.x == -858993460)) {
-                for (auto _l : game.getBoard().getPiece(selectedPiece)->getPossibleLocations()) {
+            if (!(selectedPiece.x == -1)) {
+                for (glm::ivec2 _l : game.getBoard().getPiece(selectedPiece)->getPossibleLocations()) {
                     std::cout << _l.x << _l.y << "\n";
-                    if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == _l)
-                        mainShader.setBool("selectedTileTexture", true);
-                    else
-                        mainShader.setBool("selectedTileTexture", false);
+                    if (glm::ivec2(i % 8, (i - (i % 8)) / 8) == _l) {
+                        mainShader.setBool("renderPossibleMoves", true);
+                        break;
+                    }
+                    else mainShader.setBool("renderPossibleMoves", false);  
                 }
             }
             if (game.getBoard().getPiece(glm::ivec2(i % 8, (i - (i % 8)) / 8)) != nullptr) {

@@ -6,6 +6,6 @@ private:
 public:
 	Queen(Colour _c, ChessBoard& ref);
 
-	const std::vector<glm::ivec2>& getPossibleLocations();
+	const std::vector<glm::ivec2> getPossibleLocations();
 
 };

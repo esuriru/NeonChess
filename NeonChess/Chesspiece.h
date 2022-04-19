@@ -19,7 +19,7 @@ public:
 	ChessPiece(ChessBoard& ref);
 	void setPieceColour(const Colour& colour);
 	const Colour& getPieceColour() const;
-	virtual const std::vector<glm::ivec2>& getPossibleLocations() = 0;
+	virtual const std::vector<glm::ivec2> getPossibleLocations() = 0;
 	const unsigned int& getPieceID() const;
 	
 };

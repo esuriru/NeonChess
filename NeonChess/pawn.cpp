@@ -7,7 +7,7 @@ Pawn::Pawn(Colour _c, ChessBoard& ref)
 	pieceID = 5;
 }
 
-const std::vector<glm::ivec2>& Pawn::getPossibleLocations() {
+const std::vector<glm::ivec2> Pawn::getPossibleLocations() {
 	glm::ivec2 currentLocation = boardRef.getPieceLocation(this);
 	std::vector<glm::ivec2> possibleMoves;
 	if (this->getPieceColour() == Colour::WHITE) {
