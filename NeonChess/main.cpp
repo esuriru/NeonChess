@@ -263,7 +263,7 @@ int main() {
             glfwGetCursorPos(window, &mousex, &mousey);
             if (mousex < 600) {
                 if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
-                    std::cout << "grid selected:" << (int)mousex / 75 << "," << (int)mousey / 75 << "\n";
+                    //std::cout << "grid selected:" << (int)(8 - (mousex / 75)) << "," << (int)(8 - (mousey / 75)) << "\n";
                     if ((!(selectedPiece.x == -1)) && glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75)) != selectedPiece) {
                         for (glm::ivec2 _l : game.getBoard().getPiece(selectedPiece)->getPossibleLocations()) {
                             if (glm::ivec2(8 - (mousex / 75), 8 - (mousey / 75)) == _l) {
