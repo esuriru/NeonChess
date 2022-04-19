@@ -6,7 +6,7 @@ ChessGame::ChessGame()
 }
 
 
-ChessBoard ChessGame::getBoard()
+ChessBoard& ChessGame::getBoard()
 {
 	return gameboard;
 }

@@ -7,6 +7,6 @@ private:
 public:
 	ChessGame();
 
-	ChessBoard getBoard();
+	ChessBoard& getBoard();
 
 };

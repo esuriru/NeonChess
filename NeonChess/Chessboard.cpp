@@ -9,6 +9,7 @@
 
 ChessBoard::ChessBoard() {
 	//white team	
+	_ct = Colour::WHITE;
 	chessboard.fill(nullptr);
 	setPiece(glm::ivec2(0, 0), new Rook(Colour::WHITE, *this)); //a1
 	setPiece(glm::ivec2(1, 0), new Knight(Colour::WHITE, *this)); //b1
@@ -56,5 +57,30 @@ const glm::ivec2& ChessBoard::getPieceLocation(ChessPiece* refPiece) const
 bool ChessBoard::inBounds(const glm::ivec2& location)
 {
 	return !(location.x > 7 || location.y > 7 || location.x < 0 || location.y < 0);
+}
+
+void ChessBoard::movePiece(ChessPiece* _p, const glm::ivec2& location)
+{
+	if (chessboard[location.x + (location.y * 8)] == nullptr) {
+
+		setPiece(getPieceLocation(_p), nullptr);
+		setPiece(location, _p);
+	}
+	else {
+		//taking of piece
+		delete chessboard[location.x + (location.y * 8)];
+		setPiece(getPieceLocation(_p), nullptr);
+		setPiece(location, _p);
+	}
+}
+
+const Colour& ChessBoard::getTurn() const
+{
+	return _ct;
+}
+
+void ChessBoard::setTurn(const Colour& col)
+{
+	_ct = col;
 }
 

@@ -20,8 +20,16 @@ const std::vector<glm::ivec2> Knight::getPossibleLocations() {
 	possibleMoves.push_back(currentLocation + glm::ivec2(-2, -1));
 
 	for (int i = 0; i < possibleMoves.size(); i++) {
-		if (!(boardRef.inBounds(possibleMoves[i])))
+		if (!(boardRef.inBounds(possibleMoves[i]))) {
 			possibleMoves.erase(possibleMoves.begin() + i);
+			i--;
+			continue;
+		}
+		if (boardRef.getPiece(possibleMoves[i]) == nullptr) continue;
+		else if (boardRef.getPiece(possibleMoves[i])->getPieceColour() == pieceColour) {
+			possibleMoves.erase(possibleMoves.begin() + i);
+			i--;
+		}
 	}
 
 	return possibleMoves;
